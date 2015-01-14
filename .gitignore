@@ -1,0 +1,14 @@
+bin
+target
+.classpath
+.project
+.settings
+*.iml
+src/main/resources/datasource.properties
+logs/
+*.swp
+.*.swp
+*.csv
+src/main/resources/redis.properties
+*.data
+*.conf

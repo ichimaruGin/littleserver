@@ -1,0 +1,8 @@
+datasource.driverClass=com.mysql.jdbc.Driver
+datasource.jdbcUrl=jdbc:mysql://localhost:3306/**
+datasource.user=**
+datasource.password=
+datasource.maxPoolSize=50
+datasource.minPoolSize=1
+datasource.initialPoolSize=1
+datasource.maxIdleTime=20
