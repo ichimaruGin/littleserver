@@ -1,8 +1,5 @@
 bin
 target
-.classpath
-.project
-.settings
 *.iml
 src/main/resources/datasource.properties
 logs/
