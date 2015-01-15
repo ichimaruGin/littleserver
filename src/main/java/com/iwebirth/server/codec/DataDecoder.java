@@ -10,6 +10,9 @@ import org.apache.mina.core.session.IoSession;
 import org.apache.mina.filter.codec.CumulativeProtocolDecoder;
 import org.apache.mina.filter.codec.ProtocolDecoderOutput;
 
+import com.iwebirth.server.ServerIoHandler;
+import com.iwebirth.util.ContactUtils;
+
 
 public class DataDecoder extends CumulativeProtocolDecoder{
 	
@@ -30,12 +33,12 @@ public class DataDecoder extends CumulativeProtocolDecoder{
 			if(isValid(frame)){
 				out.write(frame);
 			}else{
-				log.info("非法数据帧头尾");
+				log.warn("非法数据帧头尾");
 				session.close(true); //不合理的强制关闭方式
 			}
 			return true;
 		}else{
-			log.info("非法数据长度");
+			log.warn("非法数据长度");
 			session.close(true); //不合理的强制关闭方式
 		}
 		return true;
@@ -46,11 +49,10 @@ public class DataDecoder extends CumulativeProtocolDecoder{
 	 * @return 检查帧头帧尾
 	 * **/
 	private boolean isValid(String frame){
-//		if((frame.startsWith("5a5a")||frame.startsWith("5A5A"))&&(frame.endsWith("5c5c")||frame.endsWith("5C5C")))
-//			return true;
-//		else
-//			return false;
-		return true;
+		if((frame.startsWith("5a5a")||frame.startsWith("5A5A"))&&(frame.endsWith("5c5c")||frame.endsWith("5C5C")))
+			return true;
+		else
+			return false;
 	}
 	/**
 	 * @return 去除所有空格号
