@@ -2,17 +2,32 @@ package com.iwebirth.server;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
 
 import org.apache.log4j.Logger;
 import org.apache.mina.core.service.IoHandlerAdapter;
 import org.apache.mina.core.session.IdleStatus;
 import org.apache.mina.core.session.IoSession;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
+import com.iwebirth.redis.CommonRedisClient;
+import com.iwebirth.redis.TidCache;
 import com.iwebirth.util.ContactUtils;
 
+@Component
 public class ServerIoHandler extends IoHandlerAdapter{
 	static final Logger logger = Logger.getLogger(ServerIoHandler.class);
 	public static Map<String,IoSession> sessionMap = new HashMap<String, IoSession>();
+	@Autowired
+	CommonRedisClient commonRedisClient;
+	@Autowired
+	TidCache tidCache;
+	
+	public CommonRedisClient getCommonRedisClient(){
+		return this.commonRedisClient;
+	}
+	
 	@Override
 	public void exceptionCaught(IoSession session, Throwable cause)
 			throws Exception {
@@ -44,6 +59,8 @@ public class ServerIoHandler extends IoHandlerAdapter{
 			}
 			sessionMap.put(tId, session);//here we put tid---iosession into a map; todo: put it into redis or db;
 			session.write(ContactUtils.createHelloFrame()); //send Hello to terminal
+			System.out.println("tidCache"+tidCache);
+			tidCache.setTid(tId);//加入redis缓存
 		}else{
 			if(!sessionMap.containsKey(tId)){
 				//only connect cmd will put tid into sessionMap, if send data_frame directly while no tid in sessionMap,
@@ -80,7 +97,12 @@ public class ServerIoHandler extends IoHandlerAdapter{
 	@Override
 	public void sessionClosed(IoSession session) throws Exception {
 		// TODO Auto-generated method stub
-		super.sessionClosed(session);
+		//super.sessionClosed(session);
+		String tId = getTidBySessionAndRemoveSession(session);
+		if(tId != null && tId.length() > 0){
+			tidCache.delTid(tId);
+		}
+		scanSessionMap();
 	}
 
 	@Override
@@ -102,5 +124,31 @@ public class ServerIoHandler extends IoHandlerAdapter{
 		logger.info("connection created,from address="+session.getRemoteAddress()+" sessionId="+session.getId());
 		session.write(ContactUtils.createConnectionFrame());  //send connect_frame 
 	}
-
+	/**
+	 * 从sessionMap中移除session，返回该session对应的tid
+	 * **/
+	String getTidBySessionAndRemoveSession(IoSession session){
+		Set<String> keys = sessionMap.keySet();
+		String tId = null;
+		for(String key : keys){
+			if(sessionMap.get(key) == session){
+				tId = key;
+				sessionMap.remove(key);
+				break;
+			}
+		}
+		return tId;
+	}
+	
+	/**
+	 * 查看sessionMap
+	 * **/
+	void scanSessionMap(){
+		Set<String> keys = sessionMap.keySet();
+		int count = 0;
+		for(String key : keys){
+			count ++;
+			System.out.println(count+":"+key);
+		}
+	}
 }

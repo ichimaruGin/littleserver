@@ -10,24 +10,28 @@ public class TidCache {
     CommonRedisClient commonRedisClient;
 	
 	Logger logger = Logger.getLogger(TidCache.class);
-	
 	/**
 	 * @param tId terminal_id
 	 * **/
 	public boolean setTid(String tId){
-		String key = "cache-"+tId;
-		if(commonRedisClient.exists(key)){
-			String oldValue = commonRedisClient.get(key);
-			logger.info("tid已经存在于redis,key-value :" + key+"-"+oldValue);
+		String key = tId;
+		String value = tId;
+		if(!commonRedisClient.exists(key)){
+			commonRedisClient.set(key, value);
+			return true;
 		}else{
-			logger.info("tid不存在于redis");
+			return false;
 		}
-		commonRedisClient.set(key, tId);
-		return true;
 	}
 	
 	public String getTid(String tid){
-		String key = "cache-"+tid;
+		String key = tid;
 		return commonRedisClient.get(key);
+	}
+	
+	
+	public void delTid(String tid){
+		String key = tid;
+		commonRedisClient.delete(key);
 	}
 }

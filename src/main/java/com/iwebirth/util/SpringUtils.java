@@ -11,6 +11,10 @@ import org.springframework.context.support.ClassPathXmlApplicationContext;
 public class SpringUtils {
 	public static ApplicationContext spring;
 	static {
-		spring = new ClassPathXmlApplicationContext("file:src/main/resources/spring-base.xml");
+		String[] confs = {
+				"file:src/main/resources/spring-base.xml",
+				"file:src/main/resources/spring-redis.xml",
+				"file:src/main/resources/spring-hibernate.xml"};
+		spring = new ClassPathXmlApplicationContext(confs);
 	}
 }

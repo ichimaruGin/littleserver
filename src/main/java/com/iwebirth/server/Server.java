@@ -16,14 +16,20 @@ import org.apache.mina.filter.util.ReferenceCountingFilter;
 import org.apache.mina.transport.socket.nio.NioSocketAcceptor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
+import org.springframework.context.annotation.DependsOn;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
+import org.springframework.stereotype.Component;
 
 import com.iwebirth.server.codec.MyProtocolCodecFactory;
 import com.iwebirth.util.SpringUtils;
 
+@Component
 public class Server {
 	private final static Logger log = Logger.getLogger(Server.class);
 	private final static int basePort = 9527;
+	
+	@Autowired
+	ServerIoHandler serverIoHandler;
 	public static void main(String[] args){
 		IoAcceptor ioAcceptor = new NioSocketAcceptor();
 		//first filterchain  --- legal ip filter

@@ -22,6 +22,9 @@ public abstract class AbstractBaseRedisDao<K, V> {
         this.redisTemplate = redisTemplate;
     }
 
+    public RedisTemplate<K, V> getRedisTemplate(){
+    	return this.redisTemplate;
+    }
     /**
      * 获取 RedisSerializer
      * <br>------------------------------<br>

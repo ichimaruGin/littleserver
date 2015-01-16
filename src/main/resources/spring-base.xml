@@ -8,11 +8,12 @@
 	http://www.springframework.org/schema/context
 	http://www.springframework.org/schema/context/spring-context-3.0.xsd">
 	
-	<!--  <context:component-scan base-package=" "></context:component-scan> -->
+	<context:component-scan base-package="com.iwebirth.redis, com.iwebirth.server"></context:component-scan>
 	
 	<bean id="legalListFilter" class="com.iwebirth.server.LegalListFilter">
 		<property name="addrRegex" value=".*"/>  <!-- legal ip regex (here is all allowed) -->
 	</bean>
+	
 	<!-- load prop files -->
     <context:property-placeholder location="classpath:redis.properties,classpath:datasource.properties" />
 

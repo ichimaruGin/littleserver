@@ -3,7 +3,9 @@ package com.iwebirth.redis;
 import org.springframework.dao.DataAccessException;
 import org.springframework.data.redis.connection.RedisConnection;
 import org.springframework.data.redis.core.RedisCallback;
+import org.springframework.data.redis.serializer.RedisSerializer;
 import org.springframework.stereotype.Component;
+
 
 import java.util.*;
 
@@ -13,7 +15,20 @@ import java.util.*;
  */
 @Component
 public class CommonRedisClient extends AbstractBaseRedisDao<String, String>{
-
+	
+    public boolean add(final String key,final String value){
+        boolean result = redisTemplate.execute(new RedisCallback<Boolean>() {
+            public Boolean doInRedis(RedisConnection redisConnection) throws DataAccessException {
+                RedisSerializer<String> serializer = getRedisSerializer();
+                String tKey = key;
+                String cacheValue = value;
+                byte[] key = serializer.serialize(tKey); 
+                byte[] value = serializer.serialize(cacheValue);
+                return  redisConnection.setNX(key, value);
+            }
+        });
+        return result;
+    }
     /**
      * 单键值队存储
      * @param key
