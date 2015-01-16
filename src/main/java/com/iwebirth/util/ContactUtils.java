@@ -41,12 +41,12 @@ public class ContactUtils {
 		StringBuilder sb = new StringBuilder();
 		sb.append(FRAME_HEADER); 
 		switch(requestContent){
-			case REQUEST_LOCATION:sb.append(createFragment(R_LOCATION));break;
-			case REQUEST_RUNINFO:sb.append(createFragment(R_RUNINFO));break;
-			case REQUEST_ERROR:sb.append(createFragment(R_ERROR));break;
-			case REQUEST_ALARM:sb.append(createFragment(R_ALARM));break;
-			case REQUEST_OIL:sb.append(createFragment(R_OIL));break;
-			case REQUEST_OTHERS:sb.append(createFragment(R_OTHERS ));break;
+			case REQUEST_LOCATION:	sb.append(createFragment(R_LOCATION));break;
+			case REQUEST_RUNINFO:	sb.append(createFragment(R_RUNINFO));break;
+			case REQUEST_ERROR:		sb.append(createFragment(R_ERROR));break;
+			case REQUEST_ALARM:		sb.append(createFragment(R_ALARM));break;
+			case REQUEST_OIL:		sb.append(createFragment(R_OIL));break;
+			case REQUEST_OTHERS:	sb.append(createFragment(R_OTHERS ));break;
 			default:sb.append(createFragment("NULL"));logger.debug("@ContactUtils@createRequestFrame--->"+"发送了无效请求");break;
 		}		
 		sb.append(createFragment(FRAME_TAILER));
