@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Spring配置文件的根元素，使用spring-beans-3.0.xsd语义约束 -->
+<beans xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns="http://www.springframework.org/schema/beans"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:mvc="http://www.springframework.org/schema/mvc"
+	xmlns:amq="http://activemq.apache.org/schema/core"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans
+	http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+	http://www.springframework.org/schema/mvc
+	http://www.springframework.org/schema/mvc/spring-mvc-3.0.xsd
+	http://www.springframework.org/schema/context
+	http://www.springframework.org/schema/context/spring-context-3.0.xsd
+	http://activemq.apache.org/schema/core
+	http://activemq.apache.org/schema/core/activemq-core-5.9.0.xsd" >
+	
+	<!-- 自动扫描的包名 -->
+	<context:component-scan base-package="com.iwebirth.mom.jms"></context:component-scan>
+	
+	<!--配置JMS(ActiveMQ) -->
+	<!-- 连接工厂,真正可以产生Connection的ConnectionFactory-->
+	<bean id="connectionFactory" class="org.apache.activemq.spring.ActiveMQConnectionFactory">  
+        <property name="brokerURL" value="tcp://localhost:61616" />   
+    </bean>  
+
+	<!-- 定义消息队列 PTP "org.apache.activemq.command.ActiveMQQueue"--> 
+	<!--<amq:queue id="queue" physicalName="sxfj.topic"></amq:queue>-->
+	<bean id="queue" class="org.apache.activemq.command.ActiveMQQueue">
+		<constructor-arg value="default.queue"></constructor-arg>
+	</bean>
+	<!-- 定义话题 -->
+	<amq:topic id="topic" physicalName="default.topic" ></amq:topic>
+	<!-- 定义消息转换bean -->
+	<bean id="messageConvertForSys" class="com.iwebirth.mom.jms.MessageConvertForSys"></bean>
+	<!-- 定义jms模板-->
+	<bean id="jmsTemplate" class="org.springframework.jms.core.JmsTemplate">
+		<property name="connectionFactory" ref="connectionFactory"/>
+		<property name="defaultDestination" ref="queue"/>
+		<property name="pubSubDomain" value="false" /> <!--用于指定模式，false为queue队列模式,true为topic订阅模式-->	
+		<!--<property name="messageConverter" ref="messageConvertForSys"></property>	-->
+	</bean>
+	<!-- 定义消息发送器bean-->
+	<bean id="messageSender" class="com.iwebirth.mom.jms.SimpleMessageSender">
+		<property name="jmsTemplate" ref="jmsTemplate" ></property>
+	</bean>
+	<!-- 定义消息接收方 -->  
+    <bean id="messageReceiver" class="com.iwebirth.sxfj.jms.MessageReceiver"></bean>  
+    <!-- 定义一个消息监听器-->
+    <bean id="messageListenerAdapter" class="org.springframework.jms.listener.adapter.MessageListenerAdapter">
+    	<property name="delegate">
+    		<bean class="com.iwebirth.mom.jms.MessageListener"></bean>
+    	</property>
+    	<!-- 设置默认的处理方法  不设置的话 默认为handleMessage-->
+    	<property name="defaultListenerMethod" value="receiveMessage"></property>
+    </bean>
+    <!-- 消息监听容器 -->  
+    <bean id="messageListenerAdapterContainer"
+    	  class="org.springframework.jms.listener.DefaultMessageListenerContainer">
+    	  <property name="connectionFactory" ref="connectionFactory"/>
+    	  <property name="destination" ref="queue"/>
+    	  <property name="messageListener" ref="messageListenerAdapter"></property>
+    </bean>
+</beans>
