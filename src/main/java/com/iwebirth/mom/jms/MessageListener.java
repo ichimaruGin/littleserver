@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.io.Serializable;
 
 /**
+ * @author YY_410
  * 2015-1-18
  * **/
 public class MessageListener {
@@ -11,6 +12,7 @@ public class MessageListener {
 	//作为org.springframework.jms.listener.adapter.MessageListenerAdapter的属性
 
 	//如果不为MessageListenerAdapter设置defaultListenerMethod属性，则默认处理的方法为handleMessage
+	//此方法暂时不用
 	public void handleMessage(String message){
 		System.out.println("采用默认的handlerMessage处理");
 		System.out.println("GOT A MSG@receiveMessage:"+message);

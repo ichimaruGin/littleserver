@@ -42,7 +42,7 @@ public class Animal implements Serializable {
 	@Override
 	public String toString() {
 		// TODO Auto-generated method stub
-		return "呵呵";
+		return "Animal: height="+height+" weight="+weight;
 	}
 
 }

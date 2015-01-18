@@ -9,6 +9,7 @@ import javax.jms.Session;
 import org.springframework.jms.support.converter.MessageConversionException;
 import org.springframework.jms.support.converter.MessageConverter;
 /**
+ * @author YY_410
  * 2015-1-18
  * **/
 public class MessageConvertForSys implements MessageConverter{

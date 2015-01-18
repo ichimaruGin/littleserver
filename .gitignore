@@ -1,11 +1,12 @@
 bin
 target
 *.iml
-src/main/resources/datasource.properties
 logs/
 *.swp
 .*.swp
 *.csv
+src/main/resources/datasource.properties
 src/main/resources/redis.properties
+src/main/resources/jms.properties
 *.data
 *.conf
