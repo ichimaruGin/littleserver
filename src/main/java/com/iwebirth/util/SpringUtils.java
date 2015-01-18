@@ -12,9 +12,9 @@ public class SpringUtils {
 	public static ApplicationContext spring;
 	static {
 		String[] confs = {
-				"file:src/main/resources/spring-base.xml",
-				"file:src/main/resources/spring-redis.xml",
-				"file:src/main/resources/spring-hibernate.xml"};
+				"spring-base.xml",
+				"spring-redis.xml",								
+				"spring-hibernate.xml"};
 		spring = new ClassPathXmlApplicationContext(confs);
 	}
 }

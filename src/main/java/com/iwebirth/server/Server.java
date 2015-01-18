@@ -20,34 +20,38 @@ import org.springframework.context.annotation.DependsOn;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.springframework.stereotype.Component;
 
+import com.iwebirth.redis.CommonRedisClient;
 import com.iwebirth.server.codec.MyProtocolCodecFactory;
 import com.iwebirth.util.SpringUtils;
 
-@Component
 public class Server {
 	private final static Logger log = Logger.getLogger(Server.class);
 	private final static int basePort = 9527;
-	
 	@Autowired
 	ServerIoHandler serverIoHandler;
-	public static void main(String[] args){
+	@Autowired
+	LegalListFilter legalListFilter;
+	@Autowired
+	CommonRedisClient commonRedisClient;
+	public void start(){
 		IoAcceptor ioAcceptor = new NioSocketAcceptor();
 		//first filterchain  --- legal ip filter
-		ioAcceptor.getFilterChain().addFirst("LegalListFilter", new ReferenceCountingFilter(SpringUtils.spring.getBean(LegalListFilter.class)));
+		ioAcceptor.getFilterChain().addFirst("LegalListFilter", new ReferenceCountingFilter(legalListFilter));
 		//second filterchain --- codec filter
 		ioAcceptor.getFilterChain().addLast("codec",new ProtocolCodecFilter(new MyProtocolCodecFactory(Charset.forName("UTF-8"))));
 		//业务逻辑处理类ServerIoHandler.class
-		ioAcceptor.setHandler(new ServerIoHandler());
+		ioAcceptor.setHandler(serverIoHandler);
 		//设置全局会话的属性(当然也可以在handler中单独修改，session.getConfig().setXXX)
 		ioAcceptor.getSessionConfig().setReadBufferSize(2048);
 		ioAcceptor.getSessionConfig().setReaderIdleTime(5*60);
 		try {
 			ioAcceptor.bind(new InetSocketAddress(basePort));
 			log.info("server start @port "+basePort);
+			commonRedisClient.deleteCurrentDB();//由于server断开,在重启时把原有的链接全部从缓存中移除
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			log.error("server启动错误，错误异常: "+e.getMessage());
 			System.exit(0);
 		}
-	}
+	}	
 }

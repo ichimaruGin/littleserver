@@ -13,9 +13,11 @@ import java.util.*;
  * Created by zjh on 14-12-18.
  * modify by yy on 2015-1-16
  */
-@Component
 public class CommonRedisClient extends AbstractBaseRedisDao<String, String>{
 	
+	/**
+	 * 下列方法直接序列化参数后再传给redis处理
+	 * **/
     public boolean add(final String key,final String value){
         boolean result = redisTemplate.execute(new RedisCallback<Boolean>() {
             public Boolean doInRedis(RedisConnection redisConnection) throws DataAccessException {
@@ -112,6 +114,7 @@ public class CommonRedisClient extends AbstractBaseRedisDao<String, String>{
         return redisTemplate.opsForSet().members(key);
     }
 
+    
     /**
      * 清空redis缓存
      * @return
@@ -125,4 +128,6 @@ public class CommonRedisClient extends AbstractBaseRedisDao<String, String>{
             }
         });
     }
+    
+    
 }
