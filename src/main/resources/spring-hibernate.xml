@@ -14,7 +14,7 @@
 	http://www.springframework.org/schema/tx
 	http://www.springframework.org/schema/tx/spring-tx-3.0.xsd" >
 	
-	<!--  <context:component-scan base-package=""></context:component-scan>-->
+	<context:component-scan base-package="com.iwebirth.db.dao" ></context:component-scan>
 	<!-- 定义数据源bean 使用C3P0数据源 -->
 	<bean id="dataSource" class="com.mchange.v2.c3p0.ComboPooledDataSource">
 		<property name="driverClass" value="${datasource.driverClass}"/>
@@ -38,7 +38,7 @@
 			</list>
 		</property>
 		<!-- 自动扫瞄包下面的映射文件-->
-		<property name="packagesToScan" value="com.iwebirth.hibernate.model" />
+		<property name="packagesToScan" value="com.iwebirth.db.model" />
 		<property name="hibernateProperties">
 			<value>
 				hibernate.dialect = org.hibernate.dialect.MySQLDialect
@@ -63,7 +63,7 @@
 	<!-- AOP  -->
 	<aop:aspectj-autoproxy proxy-target-class="true"/>
 	<aop:config>
-		<aop:advisor advice-ref="transactionAdvice" pointcut="execution(* com.darfoo.backend.dao.*.*(..))"/>
+		<aop:advisor advice-ref="transactionAdvice" pointcut="execution(* com.iwebirth.db.dao.*.*(..))"/>
 	</aop:config>
 	
 	<!-- 根据Annotation来生成事务代理  要使用@Transactional必须要下面的声明-->

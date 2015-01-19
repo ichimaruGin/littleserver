@@ -2,6 +2,7 @@ package com.iwebirth.app;
 
 import org.junit.Test;
 
+import com.iwebirth.util.CRUDEvent;
 import com.iwebirth.util.ContactUtils;
 
 public class UtilsTests {
@@ -15,5 +16,13 @@ public class UtilsTests {
 		}
 //		ContactUtils.createRequestFrame("tId",ContactUtils.REQUEST_ERROR);
 //		System.out.println(requestFrame);
+	}
+	
+	@Test
+	public void testEnum(){
+		System.out.println(CRUDEvent.SAVE_SUCCESS);
+		System.out.println(CRUDEvent.SAVE_SUCCESS.getValue());
+		System.out.println(CRUDEvent.SAVE_SUCCESS.getName());
+		System.out.println(CRUDEvent.getNameByValue(4));
 	}
 }

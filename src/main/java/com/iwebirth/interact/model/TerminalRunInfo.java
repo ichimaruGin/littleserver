@@ -8,9 +8,9 @@ package com.iwebirth.interact.model;
  * **/
 public class TerminalRunInfo {
 	String tId;
-	int tSpeed;   
-	int tRotateSpped;
-	int tWaterTemperature;
+	int speed;   
+	int rotateSpeed;
+	int waterTemperature;
 	
 	public String gettId() {
 		return tId;
@@ -18,23 +18,29 @@ public class TerminalRunInfo {
 	public void settId(String tId) {
 		this.tId = tId;
 	}
-	public int gettSpeed() {
-		return tSpeed;
+	public int getSpeed() {
+		return speed;
 	}
-	public void settSpeed(int tSpeed) {
-		this.tSpeed = tSpeed;
+	public void setSpeed(int speed) {
+		this.speed = speed;
 	}
-	public int gettRotateSpped() {
-		return tRotateSpped;
+	public int getRotateSpped() {
+		return rotateSpeed;
 	}
-	public void settRotateSpped(int tRotateSpped) {
-		this.tRotateSpped = tRotateSpped;
+	public void setRotateSpped(int rotateSpeed) {
+		this.rotateSpeed = rotateSpeed;
 	}
-	public int gettWaterTemperature() {
-		return tWaterTemperature;
+	public int getWaterTemperature() {
+		return waterTemperature;
 	}
-	public void settWaterTemperature(int tWaterTemperature) {
-		this.tWaterTemperature = tWaterTemperature;
+	public void setWaterTemperature(int waterTemperature) {
+		this.waterTemperature = waterTemperature;
+	}
+	public TerminalRunInfo(String tId,Integer speed,Integer rotateSpeed,Integer waterTemperatue){
+		this.tId = tId;
+		this.speed = speed;
+		this.rotateSpeed = rotateSpeed;
+		this.waterTemperature = waterTemperatue;		
 	}
 	
 	

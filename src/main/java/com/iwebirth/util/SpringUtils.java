@@ -13,7 +13,8 @@ public class SpringUtils {
 	static {
 		String[] confs = {
 				"spring-base.xml",
-				"spring-redis.xml",								
+				"spring-redis.xml",	
+				"spring-jms.xml",
 				"spring-hibernate.xml"};
 		spring = new ClassPathXmlApplicationContext(confs);
 	}

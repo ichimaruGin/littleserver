@@ -8,7 +8,6 @@ package com.iwebirth.interact.model;
 public class TerminalError {
 	String tId;
 	String errorCode;  //P10003
-	String errorDetail = "";
 	public String gettId() {
 		return tId;
 	}
@@ -21,12 +20,9 @@ public class TerminalError {
 	public void setErrorCode(String errorCode) {
 		this.errorCode = errorCode;
 	}
-	public String getErrorDetail() {
-		return errorDetail;
+	public TerminalError(String tId,String errorCode){
+		this.tId = tId;
+		this.errorCode = errorCode;
 	}
-	public void setErrorDetail(String errorDetail) {
-		this.errorDetail = errorDetail;
-	}
-
 	
 }
