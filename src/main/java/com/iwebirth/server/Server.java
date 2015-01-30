@@ -1,13 +1,8 @@
 package com.iwebirth.server;
 
 import java.io.IOException;
-import java.net.InetAddress;
 import java.net.InetSocketAddress;
-import java.net.Socket;
-import java.net.UnknownHostException;
 import java.nio.charset.Charset;
-import java.util.HashMap;
-import java.util.Map;
 
 import org.apache.log4j.Logger;
 import org.apache.mina.core.service.IoAcceptor;
@@ -15,14 +10,9 @@ import org.apache.mina.filter.codec.ProtocolCodecFilter;
 import org.apache.mina.filter.util.ReferenceCountingFilter;
 import org.apache.mina.transport.socket.nio.NioSocketAcceptor;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.ApplicationContext;
-import org.springframework.context.annotation.DependsOn;
-import org.springframework.context.support.ClassPathXmlApplicationContext;
-import org.springframework.stereotype.Component;
 
 import com.iwebirth.redis.CommonRedisClient;
 import com.iwebirth.server.codec.MyProtocolCodecFactory;
-import com.iwebirth.util.SpringUtils;
 
 public class Server {
 	private final static Logger log = Logger.getLogger(Server.class);

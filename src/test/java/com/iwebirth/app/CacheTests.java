@@ -8,8 +8,6 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import com.iwebirth.redis.CommonRedisClient;
 import com.iwebirth.redis.TidCache;
-import com.iwebirth.server.ServerIoHandler;
-import com.iwebirth.util.SpringUtils;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration({

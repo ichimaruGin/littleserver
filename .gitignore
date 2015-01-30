@@ -6,8 +6,8 @@ logs/
 *.swp
 .*.swp
 *.csv
-src/main/java/META-INF/MANIFEST.MF
-src/main/resources/META-INF/MANIFEST.MF
+src/main/java/META-INF
+src/main/resources/META-INF
 src/main/resources/datasource.properties
 src/main/resources/redis.properties
 src/main/resources/jms.properties

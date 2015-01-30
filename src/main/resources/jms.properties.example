@@ -1,1 +1,1 @@
-brokerURL=tcp://localhost:port
+jms.brokerURL=tcp://localhost:port

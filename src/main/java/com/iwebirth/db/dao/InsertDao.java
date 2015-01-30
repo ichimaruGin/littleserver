@@ -2,12 +2,9 @@ package com.iwebirth.db.dao;
 
 import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.List;
-import java.util.Properties;
-import java.util.Set;
 
 import org.hibernate.Criteria;
 import org.hibernate.Session;

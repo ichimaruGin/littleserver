@@ -10,9 +10,6 @@ import org.apache.mina.core.session.IoSession;
 import org.apache.mina.filter.codec.CumulativeProtocolDecoder;
 import org.apache.mina.filter.codec.ProtocolDecoderOutput;
 
-import com.iwebirth.server.ServerIoHandler;
-import com.iwebirth.util.ContactUtils;
-
 
 public class DataDecoder extends CumulativeProtocolDecoder{
 	
