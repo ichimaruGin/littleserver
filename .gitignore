@@ -13,3 +13,4 @@ src/main/resources/redis.properties
 src/main/resources/jms.properties
 *.data
 *.conf
+mydb.sql
