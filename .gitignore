@@ -1,10 +1,13 @@
 bin
 target
+out
 *.iml
 logs/
 *.swp
 .*.swp
 *.csv
+src/main/java/META-INF/MANIFEST.MF
+src/main/resources/META-INF/MANIFEST.MF
 src/main/resources/datasource.properties
 src/main/resources/redis.properties
 src/main/resources/jms.properties
