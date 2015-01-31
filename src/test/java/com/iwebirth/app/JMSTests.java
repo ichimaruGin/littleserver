@@ -12,8 +12,8 @@ import com.iwebirth.mom.jms.SimpleMessageSender;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration({
-	"file:src/main/resources/spring-base.xml",
-	"file:src/main/resources/spring-jms.xml"
+	"classpath:spring-base.xml",
+	"classpath:spring-jms.xml"
 })
 public class JMSTests {
 	

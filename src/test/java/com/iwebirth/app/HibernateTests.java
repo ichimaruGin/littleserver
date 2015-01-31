@@ -12,8 +12,8 @@ import com.iwebirth.interact.model.TerminalRunInfo;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration({
-	"file:src/main/resources/spring-base.xml",
-	"file:src/main/resources/spring-hibernate.xml"
+	"classpath:spring-base.xml",
+    "classpath:spring-hibernate.xml"
 })
 public class HibernateTests {
 	@Autowired
