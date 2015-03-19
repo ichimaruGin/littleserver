@@ -21,7 +21,9 @@
 	<bean id="redisTemplate" class="org.springframework.data.redis.core.RedisTemplate"  
         p:connectionFactory-ref="jedisConnectionFactory"
         p:keySerializer-ref="stringRedisSerializer"
-        p:valueSerializer-ref="stringRedisSerializer"/>  
+        p:valueSerializer-ref="stringRedisSerializer"
+        p:hashKeySerializer-ref="stringRedisSerializer"
+        p:hashValueSerializer-ref="stringRedisSerializer"/>
     <!-- CommonRedisClient-->
     <bean id="commonRedisClient" class="com.iwebirth.redis.CommonRedisClient"/>
     <bean id="tidCache" class="com.iwebirth.redis.TidCache"/>

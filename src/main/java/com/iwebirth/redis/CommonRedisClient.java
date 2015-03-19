@@ -42,7 +42,7 @@ public class CommonRedisClient extends AbstractBaseRedisDao<String, String>{
      * 单键值get
      * **/
     public String get(String key){
-    	return redisTemplate.opsForValue().get(key);
+    	return get(key);
     }
     /**
      * 按键值对存入
@@ -52,6 +52,7 @@ public class CommonRedisClient extends AbstractBaseRedisDao<String, String>{
     public void hmset(String key, HashMap param) {
         redisTemplate.opsForHash().putAll(key, param);
     }
+
 
     public Collection<String> hmget(String key, Collection<String> fields) {
         return redisTemplate.<String, String>opsForHash().multiGet(key, fields);
