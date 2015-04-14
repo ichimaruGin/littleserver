@@ -1,4 +1,4 @@
-package com.iwebirth.mom.jms;
+package com.iwebirth.mom;
 
 import java.io.Serializable;
 

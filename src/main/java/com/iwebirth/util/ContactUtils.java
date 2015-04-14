@@ -26,30 +26,30 @@ public class ContactUtils {
     public static final String R_OIL = "OIL";
     public static final String R_OTHERS = "OTHERS";
     public static final String R_CONNECT = "CONNECT";
-    
+    public static final String R_RECONNECT = "RECONNECT";
+
     public static String FRAME_HEADER = "5A5A";
     public static String FRAME_TAILER = "5C5C";
     public static String FRAME_SPILT = "#";
     
     private static Logger logger = Logger.getLogger(ContactUtils.class);
 	/**
-	 * @param tId terminalId
 	 * @param requestContent e.g. ContactUtils.REQUEST_LOCATION
 	 * --->5A5A#tId#location#5C5C
 	 * **/
-	public static String createRequestFrame(String tId,int requestContent){
+	public static String createRequestFrame(int requestContent){
 		StringBuilder sb = new StringBuilder();
 		sb.append(FRAME_HEADER); 
 		switch(requestContent){
-			case REQUEST_LOCATION:	sb.append(createFragment(R_LOCATION));break;
-			case REQUEST_RUNINFO:	sb.append(createFragment(R_RUNINFO));break;
-			case REQUEST_ERROR:		sb.append(createFragment(R_ERROR));break;
-			case REQUEST_ALARM:		sb.append(createFragment(R_ALARM));break;
-			case REQUEST_OIL:		sb.append(createFragment(R_OIL));break;
-			case REQUEST_OTHERS:	sb.append(createFragment(R_OTHERS ));break;
-			default:sb.append(createFragment("NULL"));logger.debug("@ContactUtils@createRequestFrame--->"+"发送了无效请求");break;
+			case REQUEST_LOCATION:	sb.append(prefix(R_LOCATION));break;
+			case REQUEST_RUNINFO:	sb.append(prefix(R_RUNINFO));break;
+			case REQUEST_ERROR:		sb.append(prefix(R_ERROR));break;
+			case REQUEST_ALARM:		sb.append(prefix(R_ALARM));break;
+			case REQUEST_OIL:		sb.append(prefix(R_OIL));break;
+			case REQUEST_OTHERS:	sb.append(prefix(R_OTHERS ));break;
+			default:sb.append(prefix("NULL"));logger.debug("@ContactUtils@createRequestFrame--->"+"发送了无效请求");break;
 		}		
-		sb.append(createFragment(FRAME_TAILER));
+		sb.append(prefix(FRAME_TAILER));
 		logger.debug(sb.toString());
 		return  sb.toString(); 
 	}
@@ -60,13 +60,13 @@ public class ContactUtils {
 	public static String createReconnectionFrame(){
 		return "5A5A#RECONNECT#5C5C";
 	}	
-	public static String createHelloFrame(){
-		return "5A5A#Tid#OK#5C5C";
+	public static String createHelloFrame(String tid){
+		return "5A5A#"+tid+"#HELLO#5C5C";
 	}
 	/**
 	 * 构造 "#content"这种格式的帧片段
 	 * **/
-	private static String createFragment(String content){
+	private static String prefix(String content){
 		return FRAME_SPILT+content;
 	}
 	
@@ -84,4 +84,34 @@ public class ContactUtils {
 		}
 		return fragment;
 	}
+
+    //clinet mock frame data
+    public static String createMCConnect(String tid){
+        return new StringBuilder().append(FRAME_HEADER).append(prefix(tid)).append(prefix(R_CONNECT)).append(prefix(FRAME_TAILER)).toString();
+    }
+
+    public static String createMCLocation(String tid,String lng,String lat){
+        return new StringBuilder().append(FRAME_HEADER).append(prefix(tid)).append(prefix(R_LOCATION)).append(prefix(lng)).
+        append(prefix(lat)).append(prefix(FRAME_TAILER)).toString();
+    }
+
+    public static String createMCRuninfo(String tid,String speed,String rs,String wt){
+        return new StringBuilder().append(FRAME_HEADER).append(prefix(tid)).append(prefix(R_RUNINFO)).append(prefix(speed)).
+                append(prefix(rs)).append(wt).append(prefix(FRAME_TAILER)).toString();
+    }
+
+    public static String createMCError(String tid,String errorCode){
+        return new StringBuilder().append(FRAME_HEADER).append(prefix(tid)).append(prefix(R_ERROR)).append(prefix(errorCode)).
+                append(prefix(FRAME_TAILER)).toString();
+    }
+
+    public static String createMCAlarm(String tid,String detail,String level){
+        return new StringBuilder().append(FRAME_HEADER).append(prefix(tid)).append(prefix(R_ALARM)).append(prefix(detail)).
+                append(prefix(level)).append(prefix(FRAME_TAILER)).toString();
+    }
+
+    public static String createMCOil(String tid,String exception,String exceptionDetail){
+        return new StringBuilder().append(FRAME_HEADER).append(prefix(tid)).append(prefix(R_OIL)).append(prefix(exception)).
+                append(prefix(exceptionDetail)).append(prefix(FRAME_TAILER)).toString();
+    }
 }

@@ -93,7 +93,7 @@ public class InsertDao {
 				session.createSQLQuery(del).executeUpdate();
 			}
 			br = new BufferedReader(new FileReader(new File("src/main/resources/obd-error.txt")));
-			String line = "";
+			String line;
 			while((line=br.readLine()) != null){
 				System.out.println(line);
 				String[] fragments = line.split("=");

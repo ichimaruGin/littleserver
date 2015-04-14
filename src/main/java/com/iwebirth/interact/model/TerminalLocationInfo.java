@@ -9,6 +9,7 @@ public class TerminalLocationInfo {
 	String tId;
 	long tLatitude;
 	long tLongitude;
+
 	public String gettId() {
 		return tId;
 	}

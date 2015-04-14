@@ -8,7 +8,7 @@ package com.iwebirth.interact.model;
 public class TerminalOilInfo {
 	String tId;
 	boolean oilException;
-	String oilDetail;
+	String exceptionDetail;
 	
 	public String gettId() {
 		return tId;
@@ -16,18 +16,20 @@ public class TerminalOilInfo {
 	public void settId(String tId) {
 		this.tId = tId;
 	}
-	public boolean isOilException() {
-		return oilException;
-	}
-	public void setOilException(boolean oilException) {
-		this.oilException = oilException;
-	}
-	public String getOilDetail() {
-		return oilDetail;
-	}
-	public void setOilDetail(String oilDetail) {
-		this.oilDetail = oilDetail;
-	}
-	
-	
+
+    public boolean isOilException() {
+        return oilException;
+    }
+
+    public void setOilException(boolean oilException) {
+        this.oilException = oilException;
+    }
+
+    public String getExceptionDetail() {
+        return exceptionDetail;
+    }
+
+    public void setExceptionDetail(String exceptionDetail) {
+        this.exceptionDetail = exceptionDetail;
+    }
 }

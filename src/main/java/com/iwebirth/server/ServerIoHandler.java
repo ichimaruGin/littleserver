@@ -27,7 +27,9 @@ public class ServerIoHandler extends IoHandlerAdapter{
 	public void exceptionCaught(IoSession session, Throwable cause)
 			throws Exception {
 		// TODO Auto-generated method stub
-		super.exceptionCaught(session, cause);
+		//super.exceptionCaught(session, cause);
+
+
 	}
 	@Override
 	public void sessionClosed(IoSession session) throws Exception {
@@ -47,27 +49,20 @@ public class ServerIoHandler extends IoHandlerAdapter{
 		// TODO Auto-generated method stub
 		//super.messageReceived(session, message);
 		String msg = (String)message;
-		String tid = null;
-		String cmd = null;
-		try{
-			tid = ContactUtils.getFragmentByIndex(msg, 1); //get terminal id
-			cmd = ContactUtils.getFragmentByIndex(msg, 2); //get the kind of msg
-		}catch(Exception e){
-			e.printStackTrace();
-		}
-		if(ContactUtils.R_CONNECT.endsWith(cmd)){
+		String tid = ContactUtils.getFragmentByIndex(msg, 1); //设备终端号
+		String cmd = ContactUtils.getFragmentByIndex(msg, 2); //终端的消息命令
+		if(ContactUtils.R_CONNECT.equalsIgnoreCase(cmd)){
 			//connect cmd
-			logger.info("connect cmd");
 			if(sessionMap.containsKey(tid)){
-				IoSession oldSession = (IoSession)sessionMap.get(tid);
+				IoSession oldSession = sessionMap.get(tid);
 				if(!oldSession.isClosing() || oldSession.isConnected()){
 					System.out.println("覆盖:"+tid);
 					oldSession.close(true);				
 				}
 			}
-			sessionMap.put(tid, session);//here we put tid---iosession into a map; todo: put it into redis or db;
+			sessionMap.put(tid, session);//here we put tid---iosession into a map;
 			System.out.println("新增:"+tid);
-			session.write(ContactUtils.createHelloFrame()); //send Hello to terminal
+			session.write(ContactUtils.createHelloFrame(tid)); //向终端打招呼（终端无须理会）
 			tidCache.setTid(tid);//加入redis缓存
 		}else{
 			if(!sessionMap.containsKey(tid)){
@@ -121,7 +116,7 @@ public class ServerIoHandler extends IoHandlerAdapter{
 	public void sessionOpened(IoSession session) throws Exception {
 		// TODO Auto-generated method stub
 		logger.info("connection created,from address="+session.getRemoteAddress()+" sessionId="+session.getId());
-		session.write(ContactUtils.createConnectionFrame());  //send connect_frame 
+		session.write(ContactUtils.createConnectionFrame());  //握手请求cmd
 	}
 	/**
 	 * 从sessionMap中移除session，返回该session对应的tid
@@ -149,5 +144,8 @@ public class ServerIoHandler extends IoHandlerAdapter{
 			count ++;
 			System.out.println(count+":"+key+"@"+TimeUtils.getFormatTime(System.currentTimeMillis()));
 		}
+        if(count == 0){
+            System.out.println("当前无连接");
+        }
 	}
 }

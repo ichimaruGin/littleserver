@@ -1,5 +1,7 @@
 package com.iwebirth.mom.jms;
 
+import com.iwebirth.mom.Animal;
+
 import java.io.IOException;
 import java.io.Serializable;
 
