@@ -1,27 +1,24 @@
 package com.iwebirth.server;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Set;
-
+import com.iwebirth.redis.RedisService;
+import com.iwebirth.util.ContactUtils;
+import com.iwebirth.util.TimeUtils;
 import org.apache.log4j.Logger;
 import org.apache.mina.core.service.IoHandlerAdapter;
 import org.apache.mina.core.session.IdleStatus;
 import org.apache.mina.core.session.IoSession;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import com.iwebirth.redis.CommonRedisClient;
-import com.iwebirth.redis.TidCache;
-import com.iwebirth.util.ContactUtils;
-import com.iwebirth.util.TimeUtils;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Set;
 
 public class ServerIoHandler extends IoHandlerAdapter{
 	static final Logger logger = Logger.getLogger(ServerIoHandler.class);
 	public static Map<String,IoSession> sessionMap = new HashMap<String, IoSession>();
-	@Autowired
-	CommonRedisClient commonRedisClient;
-	@Autowired
-	TidCache tidCache;	
+
+    @Autowired
+    RedisService redisService;
 	
 	@Override
 	public void exceptionCaught(IoSession session, Throwable cause)
@@ -38,7 +35,7 @@ public class ServerIoHandler extends IoHandlerAdapter{
 		String tid = getTidBySessionAndRemoveSession(session);
 		if(tid != null && tid.length() > 0){
 			System.out.println("移除:"+tid);
-			tidCache.delTid(tid);
+            redisService.removeFromCacheMap(RedisService.REDIS_ALIVE_TERMINAL_MAP_KEY, tid);
 		}		
 		System.out.println("--------剩余的连接--------");
 		scanSessionMap();
@@ -63,7 +60,7 @@ public class ServerIoHandler extends IoHandlerAdapter{
 			sessionMap.put(tid, session);//here we put tid---iosession into a map;
 			System.out.println("新增:"+tid);
 			session.write(ContactUtils.createHelloFrame(tid)); //向终端打招呼（终端无须理会）
-			tidCache.setTid(tid);//加入redis缓存
+            redisService.insertIntoCacheMap(RedisService.REDIS_ALIVE_TERMINAL_MAP_KEY, tid, System.currentTimeMillis() / 1000 + ""); //redis cache
 		}else{
 			if(!sessionMap.containsKey(tid)){
 				//only connect cmd will put tid into sessionMap, if send data_frame directly while no tid in sessionMap,

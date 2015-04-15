@@ -26,7 +26,7 @@ public class ClientIoHandler extends IoHandlerAdapter{
         String cmd = ContactUtils.getFragmentByIndex(frame,1);
         if(ContactUtils.R_CONNECT.equalsIgnoreCase(cmd) || ContactUtils.R_RECONNECT.equalsIgnoreCase(cmd)){
             session.write(ContactUtils.createMCConnect(this.tid));
-            Thread mcLocationThread = new Thread(new MCLocationRunnable(tid,session,5*1000l));
+            Thread mcLocationThread = new Thread(new MCLocationRunnable(tid,session,60*1000l));
             mcLocationThread.start();
         }else if(ContactUtils.R_LOCATION.equalsIgnoreCase(cmd)){
 

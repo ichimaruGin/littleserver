@@ -26,12 +26,13 @@
         p:hashValueSerializer-ref="stringRedisSerializer"/>
     <!-- CommonRedisClient-->
     <bean id="commonRedisClient" class="com.iwebirth.redis.CommonRedisClient"/>
-    <bean id="tidCache" class="com.iwebirth.redis.TidCache"/>
+    <bean id="redisService" class="com.iwebirth.redis.RedisService"/>
     
     <bean id="legalListFilter" class="com.iwebirth.server.LegalListFilter"
 		p:addrRegex=".*" />  <!--  legal ip regex (here is all allowed) -->
     <bean id="serverIoHandler" class="com.iwebirth.server.ServerIoHandler"/>
     <bean id="server" class="com.iwebirth.server.Server"/>
+
 <!--
 	<bean id="serverIoHandler" class="com.iwebirth.server.ServerIoHandler" 
 		p:commonRedisClient-ref = "commonRedisClient"

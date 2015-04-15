@@ -8,40 +8,46 @@ package com.iwebirth.interact.model;
  * **/
 public class TerminalRunInfo {
 	String tId;
-	int speed;   
-	int rotateSpeed;
-	int waterTemperature;
-	
-	public String gettId() {
-		return tId;
-	}
-	public void settId(String tId) {
-		this.tId = tId;
-	}
-	public int getSpeed() {
-		return speed;
-	}
-	public void setSpeed(int speed) {
-		this.speed = speed;
-	}
-	public int getRotateSpped() {
-		return rotateSpeed;
-	}
-	public void setRotateSpped(int rotateSpeed) {
-		this.rotateSpeed = rotateSpeed;
-	}
-	public int getWaterTemperature() {
-		return waterTemperature;
-	}
-	public void setWaterTemperature(int waterTemperature) {
-		this.waterTemperature = waterTemperature;
-	}
-	public TerminalRunInfo(String tId,Integer speed,Integer rotateSpeed,Integer waterTemperatue){
-		this.tId = tId;
-		this.speed = speed;
-		this.rotateSpeed = rotateSpeed;
-		this.waterTemperature = waterTemperatue;		
-	}
-	
-	
+	String speed;
+	String rotate;
+    String waterTemperature;
+
+    public String gettId() {
+        return tId;
+    }
+
+    public void settId(String tId) {
+        this.tId = tId;
+    }
+
+    public String getSpeed() {
+        return speed;
+    }
+
+    public void setSpeed(String speed) {
+        this.speed = speed;
+    }
+
+    public String getRotate() {
+        return rotate;
+    }
+
+    public void setRotate(String rotate) {
+        this.rotate = rotate;
+    }
+
+    public String getWaterTemperature() {
+        return waterTemperature;
+    }
+
+    public void setWaterTemperature(String waterTemperature) {
+        this.waterTemperature = waterTemperature;
+    }
+
+    public TerminalRunInfo(String tId, String rotateSpeed, String speed, String waterTemperature) {
+        this.tId = tId;
+        this.rotate = rotateSpeed;
+        this.speed = speed;
+        this.waterTemperature = waterTemperature;
+    }
 }
