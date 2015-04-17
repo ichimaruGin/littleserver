@@ -1,35 +1,24 @@
 package com.iwebirth.interact.model;
+
 /**
  * 终端与littlesever通信
  * 终端油量
+ *
  * @author YY_410
- * 2015-1-15
- * **/
-public class TerminalOilInfo {
-	String tId;
-	boolean oilException;
-	String exceptionDetail;
-	
-	public String gettId() {
-		return tId;
-	}
-	public void settId(String tId) {
-		this.tId = tId;
-	}
+ *         2015-1-15
+ *         *
+ */
+public class TerminalOilInfo extends TerminalBase {
 
-    public boolean isOilException() {
-        return oilException;
-    }
+    public String tId;
 
-    public void setOilException(boolean oilException) {
+    public boolean oilException;
+
+    public String exceptionDetail;
+
+    public TerminalOilInfo(String tId, boolean oilException, String exceptionDetail) {
+        this.tId = tId;
         this.oilException = oilException;
-    }
-
-    public String getExceptionDetail() {
-        return exceptionDetail;
-    }
-
-    public void setExceptionDetail(String exceptionDetail) {
         this.exceptionDetail = exceptionDetail;
     }
 }

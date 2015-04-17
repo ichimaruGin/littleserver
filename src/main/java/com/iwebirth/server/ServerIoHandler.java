@@ -1,7 +1,9 @@
 package com.iwebirth.server;
 
+import com.iwebirth.db.mongo.MongoService;
 import com.iwebirth.redis.RedisService;
 import com.iwebirth.util.ContactUtils;
+import com.iwebirth.util.StaticMap;
 import com.iwebirth.util.TimeUtils;
 import org.apache.log4j.Logger;
 import org.apache.mina.core.service.IoHandlerAdapter;
@@ -16,7 +18,7 @@ import java.util.Set;
 public class ServerIoHandler extends IoHandlerAdapter{
 	static final Logger logger = Logger.getLogger(ServerIoHandler.class);
 	public static Map<String,IoSession> sessionMap = new HashMap<String, IoSession>();
-
+    MongoService mongoService = new MongoService();
     @Autowired
     RedisService redisService;
 	
@@ -25,8 +27,6 @@ public class ServerIoHandler extends IoHandlerAdapter{
 			throws Exception {
 		// TODO Auto-generated method stub
 		//super.exceptionCaught(session, cause);
-
-
 	}
 	@Override
 	public void sessionClosed(IoSession session) throws Exception {
@@ -35,7 +35,7 @@ public class ServerIoHandler extends IoHandlerAdapter{
 		String tid = getTidBySessionAndRemoveSession(session);
 		if(tid != null && tid.length() > 0){
 			System.out.println("移除:"+tid);
-            redisService.removeFromCacheMap(RedisService.REDIS_ALIVE_TERMINAL_MAP_KEY, tid);
+            redisService.removeFromCacheMap(StaticMap.REDIS_ALIVE_TERMINAL_MAP_KEY, tid);
 		}		
 		System.out.println("--------剩余的连接--------");
 		scanSessionMap();
@@ -46,8 +46,8 @@ public class ServerIoHandler extends IoHandlerAdapter{
 		// TODO Auto-generated method stub
 		//super.messageReceived(session, message);
 		String msg = (String)message;
-		String tid = ContactUtils.getFragmentByIndex(msg, 1); //设备终端号
-		String cmd = ContactUtils.getFragmentByIndex(msg, 2); //终端的消息命令
+		String tid = ContactUtils.getfragByIndex(msg, 1); //设备终端号
+		String cmd = ContactUtils.getfragByIndex(msg, 2); //终端的消息命令
 		if(ContactUtils.R_CONNECT.equalsIgnoreCase(cmd)){
 			//connect cmd
 			if(sessionMap.containsKey(tid)){
@@ -60,7 +60,7 @@ public class ServerIoHandler extends IoHandlerAdapter{
 			sessionMap.put(tid, session);//here we put tid---iosession into a map;
 			System.out.println("新增:"+tid);
 			session.write(ContactUtils.createHelloFrame(tid)); //向终端打招呼（终端无须理会）
-            redisService.insertIntoCacheMap(RedisService.REDIS_ALIVE_TERMINAL_MAP_KEY, tid, System.currentTimeMillis() / 1000 + ""); //redis cache
+            redisService.insertIntoCacheMap(StaticMap.REDIS_ALIVE_TERMINAL_MAP_KEY, tid, System.currentTimeMillis() / 1000 + ""); //redis cache
 		}else{
 			if(!sessionMap.containsKey(tid)){
 				//only connect cmd will put tid into sessionMap, if send data_frame directly while no tid in sessionMap,
@@ -68,21 +68,11 @@ public class ServerIoHandler extends IoHandlerAdapter{
 				logger.info("reconnect cmd");
 				session.write(ContactUtils.createReconnectionFrame());
 			}else{
-				if(ContactUtils.R_LOCATION.endsWith(cmd)){
-					logger.info("location cmd");
-				}else if(ContactUtils.R_RUNINFO.endsWith(cmd)){
-					logger.info("runinfo cmd");
-				}else if(ContactUtils.R_ERROR.endsWith(cmd)){
-					logger.info("error cmd");
-				}else if(ContactUtils.R_ALARM.endsWith(cmd)){
-					logger.info("alarm cmd");
-				}else if(ContactUtils.R_OIL.endsWith(cmd)){
-					logger.info("oil cmd");
-				}else if(ContactUtils.R_OTHERS.endsWith(cmd)){
-					logger.info("others cmd");
-				}else{
-					logger.info("null cmd");
-				}
+                Object info = ContactUtils.convertFrameToObj(msg);
+                if(info != null) {
+                    redisService.updateCacheMap(tid,info);
+                    mongoService.insertObject(info);
+                }
 			}
 		}
 		

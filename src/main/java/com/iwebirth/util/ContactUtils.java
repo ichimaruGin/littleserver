@@ -1,5 +1,6 @@
 package com.iwebirth.util;
 
+import com.iwebirth.interact.model.*;
 import org.apache.log4j.Logger;
 
 /**
@@ -73,7 +74,7 @@ public class ContactUtils {
 	/**
 	 * 处理#分隔的数据片段
 	 * **/
-	public static String getFragmentByIndex(String frame , int index){
+	public static String getfragByIndex(String frame, int index){
 		String[] fragments;
 		String fragment = "";
 		try{
@@ -97,7 +98,7 @@ public class ContactUtils {
 
     public static String createMCRuninfo(String tid,String speed,String rs,String wt){
         return new StringBuilder().append(FRAME_HEADER).append(prefix(tid)).append(prefix(R_RUNINFO)).append(prefix(speed)).
-                append(prefix(rs)).append(wt).append(prefix(FRAME_TAILER)).toString();
+                append(prefix(rs)).append(prefix(wt)).append(prefix(FRAME_TAILER)).toString();
     }
 
     public static String createMCError(String tid,String errorCode){
@@ -113,5 +114,31 @@ public class ContactUtils {
     public static String createMCOil(String tid,String exception,String exceptionDetail){
         return new StringBuilder().append(FRAME_HEADER).append(prefix(tid)).append(prefix(R_OIL)).append(prefix(exception)).
                 append(prefix(exceptionDetail)).append(prefix(FRAME_TAILER)).toString();
+    }
+
+    //将数据帧转成对象
+    public static Object convertFrameToObj(String frame){
+        String cmd = getfragByIndex(frame,2);
+        try{
+            if(ContactUtils.R_LOCATION.endsWith(cmd)){
+                return new TerminalLocationInfo(getfragByIndex(frame, 1), getfragByIndex(frame, 3), getfragByIndex(frame, 4));
+            }else if(ContactUtils.R_RUNINFO.endsWith(cmd)){
+                return new TerminalRunInfo(getfragByIndex(frame, 1),Integer.parseInt(getfragByIndex(frame, 3)),Integer.parseInt(getfragByIndex(frame, 5)),Integer.parseInt(getfragByIndex(frame, 4)));
+            }else if(ContactUtils.R_ALARM.endsWith(cmd)){
+                return new TerminalAlarm(getfragByIndex(frame, 1), getfragByIndex(frame, 3),Integer.parseInt(getfragByIndex(frame, 4)));
+            }else if(ContactUtils.R_ERROR.endsWith(cmd)){
+                return new TerminalError(getfragByIndex(frame, 1), getfragByIndex(frame, 3));
+            }else if(ContactUtils.R_OIL.endsWith(cmd)){
+                return new TerminalOilInfo(getfragByIndex(frame, 1),Boolean.parseBoolean(getfragByIndex(frame, 3)), getfragByIndex(frame, 4));
+            }else if(ContactUtils.R_OTHERS.endsWith(cmd)){
+                return new TerminalOtherInfo(getfragByIndex(frame, 1), getfragByIndex(frame, 3));
+            }else{
+                System.out.println("cmd not exists");
+            }
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+
+        return null;
     }
 }

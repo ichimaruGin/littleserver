@@ -6,48 +6,20 @@ package com.iwebirth.interact.model;
  * @author YY_410
  * 2015-1-15
  * **/
-public class TerminalRunInfo {
-	String tId;
-	String speed;
-	String rotate;
-    String waterTemperature;
+public class TerminalRunInfo extends TerminalBase {
 
-    public String gettId() {
-        return tId;
-    }
+	public String tId;
 
-    public void settId(String tId) {
+    public int speed;
+
+    public int rotate;
+
+    public int waterTemperature;
+
+    public TerminalRunInfo(String tId, int speed, int waterTemperature, int rotate) {
         this.tId = tId;
-    }
-
-    public String getSpeed() {
-        return speed;
-    }
-
-    public void setSpeed(String speed) {
         this.speed = speed;
-    }
-
-    public String getRotate() {
-        return rotate;
-    }
-
-    public void setRotate(String rotate) {
+        this.waterTemperature = waterTemperature;
         this.rotate = rotate;
-    }
-
-    public String getWaterTemperature() {
-        return waterTemperature;
-    }
-
-    public void setWaterTemperature(String waterTemperature) {
-        this.waterTemperature = waterTemperature;
-    }
-
-    public TerminalRunInfo(String tId, String rotateSpeed, String speed, String waterTemperature) {
-        this.tId = tId;
-        this.rotate = rotateSpeed;
-        this.speed = speed;
-        this.waterTemperature = waterTemperature;
     }
 }

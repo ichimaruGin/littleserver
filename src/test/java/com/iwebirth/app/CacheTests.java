@@ -11,10 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration({
@@ -63,12 +60,12 @@ public class CacheTests {
     @Test
     public void refreshCacheMap(){
         String tid = "tid001";
-        IntimeInfo intime = new IntimeInfo(tid,"700","45","80","30.09823","120.3823");
-        redisService.updateCacheMap(RedisService.REDIS_INTIMEINFO_TERMINAL_MAP_KEY, tid, intime);
+        IntimeInfo intime = new IntimeInfo("tid123",45,80,"40.3123","120.2134",700);
+        redisService.updateCacheMap( tid, intime);
         TerminalLocationInfo location = new TerminalLocationInfo(tid,"1.2341235","1.2343125");
-        redisService.updateCacheMap(RedisService.REDIS_LOCATION_TERMINAL_MAP_KEY, tid, location);
-        TerminalRunInfo runInfo = new TerminalRunInfo(tid,"40","700","80");
-        redisService.updateCacheMap(RedisService.REDIS_RUNINFO_TERMINAL_MAP_KEY, tid, runInfo);
+        redisService.updateCacheMap( tid, location);
+        TerminalRunInfo runInfo = new TerminalRunInfo(tid,45,700,80);
+        redisService.updateCacheMap( tid, runInfo);
     }
 
     public void showMap(Map map){
@@ -81,4 +78,13 @@ public class CacheTests {
 	public void clearAllCache(){
 		System.out.println(commonRedisClient.deleteCurrentDB());
 	}
+
+    @Test
+    public void testDelete(){
+        Set<String> keys = commonRedisClient.getKeys("T*");
+        System.out.println(keys.size());
+        for (String key : keys) {
+            System.out.println(key);
+        }
+    }
 }

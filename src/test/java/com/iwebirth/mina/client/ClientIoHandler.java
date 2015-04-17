@@ -22,12 +22,14 @@ public class ClientIoHandler extends IoHandlerAdapter{
 			throws Exception {
 		// TODO Auto-generated method stub
 		System.out.println("收到来自server的回复："+ message);
-        String frame = (String)message;
-        String cmd = ContactUtils.getFragmentByIndex(frame,1);
+        String cmd = ContactUtils.getfragByIndex((String) message, 1);
         if(ContactUtils.R_CONNECT.equalsIgnoreCase(cmd) || ContactUtils.R_RECONNECT.equalsIgnoreCase(cmd)){
             session.write(ContactUtils.createMCConnect(this.tid));
             Thread mcLocationThread = new Thread(new MCLocationRunnable(tid,session,60*1000l));
+            Thread mcRuninfoThread = new Thread(new MCRuninfoRunnable(tid,session,60*1000l));
             mcLocationThread.start();
+            mcLocationThread.sleep(500l); //这里加个短延时，避免两个thread同时写导致两组frame在一起
+            mcRuninfoThread.start();
         }else if(ContactUtils.R_LOCATION.equalsIgnoreCase(cmd)){
 
         }

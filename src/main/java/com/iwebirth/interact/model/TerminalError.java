@@ -5,21 +5,12 @@ package com.iwebirth.interact.model;
  * @author YY_410
  * 2015-1-15
  * **/
-public class TerminalError {
-	String tId;
-	String errorCode;  //P10003
-	public String gettId() {
-		return tId;
-	}
-	public void settId(String tId) {
-		this.tId = tId;
-	}
-	public String getErrorCode() {
-		return errorCode;
-	}
-	public void setErrorCode(String errorCode) {
-		this.errorCode = errorCode;
-	}
+public class TerminalError extends TerminalBase{
+
+	public String tId;
+
+    public String errorCode;  //P10003
+
 	public TerminalError(String tId,String errorCode){
 		this.tId = tId;
 		this.errorCode = errorCode;

@@ -17,3 +17,18 @@
 解决方法1：采用org.springframework.data.redis.serializer.StringRedisSerializer这个类来序列化就OK了，具体做法是在配置文件中为redisTemplate
 这个bean配置对应的成员变量(具体参看spring-redis.xml)  http://qatang.com/2014/03/18/spring-data-redis%E4%BD%BF%E7%94%A8/
 解决方法2：先将key和value序列化成byte[]，再用redisConnection.setNX(...)，参考CommonRedisClient.add();
+
+#Mongo
+
+version 2.6.9
+安装完成后，在无auth的条件下通过bin/mongo进入
+use admin（切换到默认的admin库）
+db.createUser({user:"admin",pwd:"password",roles:["root"]}) //创建一个超级用户
+db.auth('admin','password') //验证
+use mydb (切换到我的db)
+db.createUser({user:"mydb",pwd:"mydb",roles:["readWirte"]}) //创建一个针对mydb的用户
+
+然后通过auth启动mongod, 这样就可以通过用户名密码登陆了；
+客户端登陆(roboMongo)
+终端登陆(bin/mongo -u mydb -p --authenticationDatabase mydb)
+

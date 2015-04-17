@@ -5,22 +5,14 @@ package com.iwebirth.interact.model;
  * @author YY_410
  * 2015-1-15
  * **/
-public class TerminalOtherInfo {
+public class TerminalOtherInfo extends TerminalBase{
 	
-	String iId;
-	String detail;
-	public String getiId() {
-		return iId;
-	}
-	public void setiId(String iId) {
-		this.iId = iId;
-	}
-	public String getDetail() {
-		return detail;
-	}
-	public void setDetail(String detail) {
-		this.detail = detail;
-	}
-	
-	
+	public String iId;
+
+	public String detail;
+
+    public TerminalOtherInfo(String iId, String detail) {
+        this.iId = iId;
+        this.detail = detail;
+    }
 }

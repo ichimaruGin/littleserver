@@ -3,6 +3,7 @@ package com.iwebirth.server;
 import java.io.IOException;
 import java.net.InetSocketAddress;
 import java.nio.charset.Charset;
+import java.util.Set;
 
 import org.apache.log4j.Logger;
 import org.apache.mina.core.service.IoAcceptor;
@@ -37,7 +38,12 @@ public class Server {
 		try {
 			ioAcceptor.bind(new InetSocketAddress(basePort));
 			log.info("server start @port "+basePort);
-			commonRedisClient.deleteCurrentDB();//由于server断开,在重启时把原有的链接全部从缓存中移除
+            Set<String> keys = commonRedisClient.getKeys("TAlive*");
+            for(String key : keys){
+                System.out.println("clear cache: key="+key);
+                commonRedisClient.delete(key);
+            }
+			//commonRedisClient.deleteCurrentDB();//由于server断开,在重启时把原有的链接全部从缓存中移除
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			log.error("server启动错误，错误异常: "+e.getMessage());

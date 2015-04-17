@@ -1,5 +1,6 @@
 package com.iwebirth.redis;
 
+import com.iwebirth.util.StaticMap;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.lang.reflect.Field;
@@ -13,14 +14,6 @@ import java.util.Map;
 public class RedisService {
     @Autowired
     CommonRedisClient commonRedisClient;
-
-    public static final String REDIS_ALIVE_TERMINAL_MAP_KEY = "TAliveId"; //在线终端数量。field对应tid，value对应time
-    public static final String REDIS_INTIMEINFO_TERMINAL_MAP_KEY = "TIntimeInfo"; //实时消息。
-    public static final String REDIS_RUNINFO_TERMINAL_MAP_KEY = "TRunInfo"; //实时运行参数。
-    public static final String REDIS_LOCATION_TERMINAL_MAP_KEY = "TLocation"; //实时位置信息。
-    public static final String REDIS_ALARM_TERMINAL_MAP_KEY = "TAlarm";//警报
-    public static final String REDIS_ERROR_TERMINAL_MAP_KAY = "TError";//故障
-    public static final String REDIS_OIL_TERMINAL_MAP_KEY = "TOil";//油量异常
 
     /**
      * 插入一组field-value
@@ -63,14 +56,15 @@ public class RedisService {
      *针对实时的信息，例如 runinfo location等，cache每个终端最新一次提交
      * update 整个map
      * **/
-    public void updateCacheMap(String key, String tid, Object model){
-        String cacheKey = key+"-"+tid;
+    public void updateCacheMap(String tid, Object model){
+        String keyPrefix = StaticMap.typeRediskeyMap.get(model.getClass().getSimpleName());
+        String cacheKey = keyPrefix+"-"+tid;
         Field[] fields = model.getClass().getDeclaredFields();
         Map<String,String> map = new HashMap();
         for(Field field : fields){
             try {
                 field.setAccessible(true);
-                map.put(field.getName(),(String)field.get(model));
+                map.put(field.getName(),String.valueOf(field.get(model)));
             } catch (IllegalAccessException e) {
                 e.printStackTrace();
             }
